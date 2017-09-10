@@ -1,0 +1,23 @@
+.toolbar-header .title {
+  -webkit-app-region: drag;
+}
+
+.window {
+	/*min-height: 100vh;*/
+}
+
+.window-content {
+  align-items: center;
+  justify-content: center;
+}
+
+#editor {
+	border: none;
+	border-bottom: 1px solid #ccc;
+	/*height: 150px;*/
+}
+
+.ql-editor {
+	/*height: 92.5px;*/
+	overflow-y: hidden !important;
+}
