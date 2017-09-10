@@ -6,6 +6,10 @@
 	/*min-height: 100vh;*/
 }
 
+.hidden {
+	display:none;
+}
+
 .window-content {
   align-items: center;
   justify-content: center;
@@ -13,11 +17,15 @@
 
 #editor {
 	border: none;
-	border-bottom: 1px solid #ccc;
+	border: 1px solid #ccc;
 	/*height: 150px;*/
 }
 
 .ql-editor {
 	/*height: 92.5px;*/
 	overflow-y: hidden !important;
+}
+
+#editor-wrapper {
+	max-height: 75vh;
 }
