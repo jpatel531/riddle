@@ -1,3 +1,58 @@
+@import url('https://fonts.googleapis.com/css?family=Encode+Sans+Semi+Condensed|Lora|Montserrat|PT+Sans|Slabo+27px|Ubuntu');
+
+body {
+	  font-family: "Ubuntu";
+}
+
+/* Set dropdown font-families */
+#toolbar .ql-font span[data-label="Encode Sans Semi Condensed"]::before {
+  font-family: "Encode Sans Semi Condensed";
+}
+
+#toolbar .ql-font span[data-label="Lora"]::before {
+  font-family: "Lora";
+}
+
+#toolbar .ql-font span[data-label="Montserrat"]::before {
+  font-family: "Montserrat";
+}
+
+#toolbar .ql-font span[data-label="PT Sans"]::before {
+  font-family: "PT Sans";
+}
+
+#toolbar .ql-font span[data-label="Slabo 27px"]::before {
+  font-family: "Slabo 27px";
+}
+
+#toolbar .ql-font span[data-label="Ubuntu"]::before {
+  font-family: "Ubuntu";
+}
+
+/* Set content font-families */
+.ql-font-lora {
+	font-family: "Lora";
+}
+
+.ql-font-encode-sans {
+  font-family: "Encode Sans Semi Condensed";
+}
+.ql-font-montserrat {
+  font-family: "Montserrat";
+}
+
+.ql-font-pt-sans {
+	font-family: "PT Sans";
+}
+
+.ql-font-slabo-27px {
+	font-family: "Slabo 27px";
+}
+
+/*.ql-font-ubuntu {
+	font-family: "Ubuntu";
+}*/
+
 .toolbar-header .title {
   -webkit-app-region: drag;
 }
@@ -17,15 +72,31 @@
 
 #editor {
 	border: none;
-	border: 1px solid #ccc;
-	/*height: 150px;*/
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  font-size: 18px;
+  font-size: 18px;
+}
+
+.ql-toolbar {
+ flex: 0 0 auto;
+ width: 100%;
 }
 
 .ql-editor {
-	/*height: 92.5px;*/
 	overflow-y: hidden !important;
+  align-items: center;
+  justify-content: center;
 }
 
 #editor-wrapper {
-	max-height: 75vh;
+	height: 100%;
+	align-self: center;
+  width: 100%;
+  padding: 0 20px;
+}
+
+#toolbar {
+	top: 0;
 }

@@ -16,6 +16,7 @@ function createWindow () {
   mainWindow = new BrowserWindow({
     width: 800,
     height: 600,
+    minWidth: 710,
     frame: false,
     titleBarStyle: 'hidden-inset', // macOS only
     frame: process.platform === 'darwin',

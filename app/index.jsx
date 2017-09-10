@@ -6,6 +6,7 @@ import { remote } from 'electron'
 import fs from 'mz/fs'
 const { dialog } = remote
 import path from 'path'
+import Toolbar from './toolbar.jsx'
 
 // Wrap inconvenient APIs with promises
 function showSaveDialogAsync (options) {
@@ -177,13 +178,17 @@ class App extends Component {
 	render() {
 		let view;
 		if (!this.state.onboarding) {
-			view = <Editor
-				ref={editor => this.editor = editor}
-				content={this.state.visibleHTML}
-				onContentChanged={this.onContentChanged.bind(this)}
-				targetWords={this.state.targetWords}
-				updateWordCount={this.updateWordCount.bind(this)}
-				visibleLineCount={this.state.lineCount} />
+			view = (
+				<div style="height: 100%; flex: 1; display: flex; flex-direction: column;">
+					<Toolbar />
+			 		<Editor
+						ref={editor => this.editor = editor}
+						content={this.state.visibleHTML}
+						onContentChanged={this.onContentChanged.bind(this)}
+						targetWords={this.state.targetWords}
+						updateWordCount={this.updateWordCount.bind(this)}
+						visibleLineCount={this.state.lineCount} />
+			 </div>)
 		} else {
 			view = (
 				<div>
