@@ -13,14 +13,11 @@ module.exports = {
         test: /\.(jsx|js)$/,
         exclude: /node_modules/,
         loader: 'babel-loader',
+        query: {
+          presets: ['stage-1', 'react']
+        }
       },
     ],
-  },
-  'resolve': {
-    'alias': {
-      'react': 'preact-compat',
-      'react-dom': 'preact-compat',
-    },
   },
   devtool: 'eval-source-map',
 }

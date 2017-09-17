@@ -1,5 +1,4 @@
-/** @jsx h */
-import {h, Component, render} from 'preact'
+import React, {Component} from 'react'
 import Quill from 'quill'
 
 function getWordCount(text) {
@@ -16,8 +15,63 @@ function centreElementInElement(container, inner) {
 
 export default class Editor extends Component {
 
-	componentDidMount() {
+  constructor(props) {
+    super(props)
+    this.isRestricted = true
+  }
 
+  onTextChange(delta, oldDelta, source) {
+    this.restrictView()
+    let text = this.editor.getText().trim()
+    let wordCount = getWordCount(text)
+    this.props.updateWordCount(wordCount)
+  }
+
+  getContent() {
+    return this.editor.root.innerHTML
+  }
+
+  restrictView() {
+    let opacity = 1
+    let grade = opacity / this.props.visibleLineCount
+    let lines = this.editor.getLines().reverse()
+    for (let index in lines) {
+      let line = lines[index]
+
+      if (index >= this.props.visibleLineCount) {
+        line.domNode.style.opacity = null
+        line.domNode.style.display = "none"
+      } else {
+        line.domNode.style.opacity = opacity
+        opacity -= grade
+      }
+    }
+  }
+
+  showRestricted() {
+    this.restrictView()
+    if (!this.isRestricted) {
+      this.resizeEditorToRestriction()
+      this.isRestricted = true
+    }
+  }
+
+  showFull() {
+    let lines = this.editor.getLines()
+    for (let line of lines) {
+      line.domNode.style.opacity = 1
+      line.domNode.style.display = null
+    }
+
+    if (this.isRestricted) {
+      this.editor.root.style.maxHeight = this.editor.root.style.height = "100%"
+      this.editor.root.style.marginTop = "12px"
+      window.onresize = null
+      this.isRestricted = false
+    }
+  }
+
+  componentDidMount() {
     let fonts = [
       'encode-sans',
       'lora',
@@ -27,75 +81,46 @@ export default class Editor extends Component {
       'ubuntu'
     ]
 
-    var Font = Quill.import('formats/font');
+    const Font = Quill.import('formats/font');
     Font.whitelist = fonts;
     Quill.register(Font, true);
     this.editor = new Quill("#editor", {
       theme: "snow",
       placeholder: "Write something",
       modules: {
-      	toolbar: '#toolbar'
+        toolbar: '#toolbar',
+        clipboard: {
+          matchVisual: false
+        }
       }
     })
 
+    this.resizeEditorToRestriction()
+    this.editor.on('text-change', this.onTextChange.bind(this))
+    this.editor.focus()
+  }
+
+  resizeEditorToRestriction() {
     let lineHeight = window.getComputedStyle(this.editor.root, null).getPropertyValue('line-height')
     let editorHeight = (parseInt(lineHeight, 10) * (this.props.visibleLineCount+1)) + 'px'
-    this.editor.root.style.maxHeight = editorHeight
+    this.editor.root.style.maxHeight = this.editor.root.style.height = editorHeight
 
     let wrapper = document.getElementById('editor-wrapper')
     let totalHeight = window.getComputedStyle(wrapper).getPropertyValue('height')
 
     centreElementInElement(wrapper, this.editor.root)
     window.onresize = () => centreElementInElement(wrapper, this.editor.root)
-
-    this.editor.on('text-change', (delta, oldDelta, source) => {
-  		let lines = this.editor.getLines().reverse()
-  		let opacity = 1
-      let grade = opacity / this.props.visibleLineCount
-  		for (let line of lines) {
-  			line.domNode.style.opacity = opacity
-  			opacity -= grade
-  		}
-
-      let deletedHTML, deletedWordCount;
-      if (lines.length > this.props.visibleLineCount) {
-        let firstLine = lines.reverse()[0];
-        deletedHTML = firstLine.domNode.outerHTML
-        deletedWordCount = getWordCount(firstLine.domNode.innerText.trim())
-        firstLine.remove()
-      }
-
-      let text = this.editor.getText().trim()
-      let wordCount = getWordCount(text);
-      this.props.updateWordCount(wordCount)
-      this.props.onContentChanged(
-        this.editor.root.innerHTML, // visible html
-        getWordCount(this.editor.getText().trim()), // visible word count
-        deletedHTML,
-        deletedWordCount
-      )
-    })
-
-    this.editor.clipboard.dangerouslyPasteHTML(0, this.props.content)
-    this.editor.focus()
-	}
+  }
 
   shouldComponentUpdate(nextProps, nextState) {
     return false
   }
 
-
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.content != this.editor.root.innerHTML) {
-      this.editor.clipboard.dangerouslyPasteHTML(0, this.props.content)
-    }
+  render() {
+    return (
+      <div id="editor-wrapper">
+        <div id="editor"></div>
+      </div>
+    )
   }
-
-	render() {
-		return (
-			<div id="editor-wrapper">
-				<div id="editor"></div>
-			</div>
-		)
-	}
 }

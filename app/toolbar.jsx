@@ -1,5 +1,4 @@
-/** @jsx h */
-import {h, Component} from 'preact'
+import React, {Component} from 'react'
 
 export default class Toolbar extends Component {
 
@@ -10,8 +9,8 @@ export default class Toolbar extends Component {
 	render() {
 		return (
 		 	<div id="toolbar">
-		    <span class="ql-formats">
-		      <select class="ql-font">
+		    <span className="ql-formats">
+		      <select className="ql-font">
 		        <option selected>Ubuntu</option>
 		        <option value="encode-sans">Encode Sans</option>
 		        <option value="montserrat">Montserrat</option>
@@ -19,31 +18,31 @@ export default class Toolbar extends Component {
 						<option value="slabo-27px">Slabo 27px</option>
 		      	<option value="lora">Lora</option>
 		      </select>
-		      <select class="ql-size"></select>
+		      <select className="ql-size"></select>
 		    </span>
-		    <span class="ql-formats">
-		      <button class="ql-bold"></button>
-		      <button class="ql-italic"></button>
-		      <button class="ql-underline"></button>
-		      <button class="ql-strike"></button>
+		    <span className="ql-formats">
+		      <button className="ql-bold"></button>
+		      <button className="ql-italic"></button>
+		      <button className="ql-underline"></button>
+		      <button className="ql-strike"></button>
 		    </span>
-		    <span class="ql-formats">
-		      <button class="ql-blockquote"></button>
-		      <button class="ql-link"></button>
+		    <span className="ql-formats">
+		      <button className="ql-blockquote"></button>
+		      <button className="ql-link"></button>
 		    </span>
-		    <span class="ql-formats">
-		      <button class="ql-header" value="1"></button>
-		      <button class="ql-header" value="2"></button>
-		      <button class="ql-header" value="3"></button>
-		      <button class="ql-header" value="4"></button>
-		      <button class="ql-header" value="5"></button>
-		      <button class="ql-header" value="6"></button>
+		    <span className="ql-formats">
+		      <button className="ql-header" value="1"></button>
+		      <button className="ql-header" value="2"></button>
+		      <button className="ql-header" value="3"></button>
+		      <button className="ql-header" value="4"></button>
+		      <button className="ql-header" value="5"></button>
+		      <button className="ql-header" value="6"></button>
 		    </span>
-		    <span class="ql-formats">
-		      <button class="ql-list" value="ordered"></button>
-		      <button class="ql-list" value="bullet"></button>
-		      <button class="ql-indent" value="-1"></button>
-		      <button class="ql-indent" value="+1"></button>
+		    <span className="ql-formats">
+		      <button className="ql-list" value="ordered"></button>
+		      <button className="ql-list" value="bullet"></button>
+		      <button className="ql-indent" value="-1"></button>
+		      <button className="ql-indent" value="+1"></button>
 		    </span>
 		  </div>
 		)
