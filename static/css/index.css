@@ -85,7 +85,6 @@ body {
 }
 
 .ql-editor {
-	overflow-y: hidden !important;
   align-items: center;
   justify-content: center;
 }
@@ -101,3 +100,10 @@ body {
 	top: 0;
 }
 
+#workspace {
+  height: 100%;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow-y: hidden;
+}

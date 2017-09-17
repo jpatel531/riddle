@@ -31,6 +31,16 @@ export default class Editor extends Component {
     return this.editor.root.innerHTML
   }
 
+  getFullContent() {
+    let container = document.createElement("div")
+    for (let line of this.editor.getLines()) {
+      let clone = line.domNode.cloneNode(true)
+      clone.style = null
+      container.appendChild(clone)
+    }
+    return container.innerHTML
+  }
+
   restrictView() {
     let opacity = 1
     let grade = opacity / this.props.visibleLineCount
@@ -65,7 +75,8 @@ export default class Editor extends Component {
 
     if (this.isRestricted) {
       this.editor.root.style.maxHeight = this.editor.root.style.height = "100%"
-      this.editor.root.style.marginTop = "12px"
+      this.editor.root.style.overflowY = "scroll"
+      this.editor.root.style.marginTop = this.editor.root.style.marginBottom = "12px"
       window.onresize = null
       this.isRestricted = false
     }
@@ -104,6 +115,7 @@ export default class Editor extends Component {
     let lineHeight = window.getComputedStyle(this.editor.root, null).getPropertyValue('line-height')
     let editorHeight = (parseInt(lineHeight, 10) * (this.props.visibleLineCount+1)) + 'px'
     this.editor.root.style.maxHeight = this.editor.root.style.height = editorHeight
+    this.editor.root.style.overflowY = "hidden"
 
     let wrapper = document.getElementById('editor-wrapper')
     let totalHeight = window.getComputedStyle(wrapper).getPropertyValue('height')

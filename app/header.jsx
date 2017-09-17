@@ -19,22 +19,10 @@ export default class Header extends Component {
             <button className="btn btn-default" onClick={this.props.handleClickView}>
               <span className="icon icon-eye"></span>
             </button>
-            <button className="btn btn-default">
-              <span className="icon icon-popup"></span>
-            </button>
-            <button className="btn btn-default">
-              <span className="icon icon-shuffle"></span>
+            <button className="btn btn-default" onClick={this.props.handleClickWordExport}>
+              <span className="icon">W</span>
             </button>
           </div>
-
-          <button className="btn btn-default">
-            <span className="icon icon-home icon-text"></span>
-            Filters
-          </button>
-
-          <button className="btn btn-default btn-dropdown pull-right">
-            <span className="icon icon-megaphone"></span>
-          </button>
         </div>
       </header>
     )

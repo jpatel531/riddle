@@ -2,16 +2,14 @@ import React from 'react'
 const {Component} = React
 
 import {render} from 'react-dom'
-// import {Window} from 'react-photonkit'
-import Editor from './editor_quill.jsx'
-// import Editor from './editor.jsx'
+import Editor from './editor.jsx'
 import path from 'path'
 import Toolbar from './toolbar.jsx'
-import File from './file'
 import Header from './header.jsx'
 import Window from './window.jsx'
 import Footer from './footer.jsx'
-import {showSaveDialogAsync, saveFileAsync} from './fs'
+import {showSaveDialogAsync, saveFileAsync, saveBlob} from './fs'
+// import docx from "html-docx-js"
 
 
 class App extends Component {
@@ -54,24 +52,22 @@ class App extends Component {
 
     let filename = this.state.filename
     let content = this.editor.getContent()
+
+    let encoded = JSON.stringify({
+      content,
+      targetWords: this.state.targetWords,
+      lineVisibility: this.state.lineCount
+    })
+
     if (filename) {
-      saveFileAsync(
-        filename,
-        content,
-        this.state.targetWords,
-        this.state.lineCount,
-      ).catch((err) => console.error(err))
+      saveFileAsync(filename,  content).catch((err) => console.error(err))
       return
     }
 
     showSaveDialogAsync()
       .then((filename) => {
-        return saveFileAsync(
-          filename,
-          content,
-          this.state.targetWords,
-          this.state.lineCount,
-        )
+        filename += ".riddle"
+        return saveFileAsync(filename, content)
       })
       .then((filename) => this.setState({filename}))
       .catch((err) => console.error(err))
@@ -81,9 +77,12 @@ class App extends Component {
     this.setState({wordCount})
   }
 
+  canBeShownFull() {
+    return this.state.wordCount >= this.state.targetWords
+  }
+
   handleClickView() {
-    let wc = this.state.visibleWordCount + this.state.deletedWordCount
-    if (wc < this.state.targetWords) {
+    if (!this.canBeShownFull()) {
       return
     }
     if (this.editor.isRestricted) {
@@ -93,11 +92,40 @@ class App extends Component {
     }
   }
 
+  handleClickWordExport() {
+    console.log('click word export')
+    if (this.state.onboarding || !this.canBeShownFull()) {
+      return
+    }
+
+    let content = `
+      <html>
+        <head>
+        </head>
+        <body>
+          <p>${this.editor.getFullContent()}</p>
+        </body>
+      </html>
+    `
+    let converted = htmlDocx.asBlob(content);
+    showSaveDialogAsync({
+      filters: {
+        name: "Word Documents", extensions: ['docx']
+      }
+    })
+      .then((filename) => {
+        filename += ".docx"
+        console.log(converted)
+        saveBlob(filename, converted)
+      })
+      .catch((err) => console.error(err))
+  }
+
   render() {
     let view;
     if (!this.state.onboarding) {
       view = (
-        <div style={{height: "100%", flex: 1, display: "flex", flexDirection: "column"}}>
+        <div id="workspace">
           <Toolbar />
           <Editor
             ref={editor => this.editor = editor}
@@ -125,6 +153,7 @@ class App extends Component {
     return (
       <Window>
         <Header
+          handleClickWordExport={this.handleClickWordExport.bind(this)}
           handleClickSave={this.handleClickSave.bind(this)}
           handleClickView={this.handleClickView.bind(this)}
           title={this.state.filename ? path.basename(this.state.filename) : 'Riddle'}>
